@@ -8,12 +8,13 @@ from PIL import ImageFont, ImageDraw, Image
 from yoloOpencv import opencvYOLO
 import imagezmq
 import socket
+import imutils
 
 
 #Camera setting
 cam_resolution=(800,600)
 #wait_restart_time: if last successful stream is over 'wait_restart_time' seconds, then restart the camera
-wait_restart_time = 10
+wait_restart_time = 60
 
 #Save img to the folder
 collect_img = False
@@ -109,7 +110,7 @@ def check_env():
             os.makedirs(output_video_path)
 #------------------------------------------------------------------------
 window_name = 'ESP32CAM'
-cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
+#cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 #cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -211,7 +212,7 @@ if __name__ == "__main__":
         if(resize_send is True):
             combine = cv2.resize(combine, resize_zmq)
 
-        cv2.imshow(window_name, combine)
+        cv2.imshow(window_name, imutils.resize(combine, width=800))
         ret_code, jpg_buffer = cv2.imencode( \
                 ".jpg", combine, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
         sender.send_jpg(rpi_name, jpg_buffer)

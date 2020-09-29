@@ -58,8 +58,11 @@ class ESC32CAM:
         self.run()
 
     def read_stream(self):
-        if(time.time()-self.success_stream>self.wait_restart):
-            self.restart_stream()
+        
+        if(self.url_ready is False):
+
+            if(time.time()-self.success_stream>self.wait_restart):
+                self.restart_stream()
         
         fix_size = self.fix_size
         rotate = self.rotate
@@ -71,19 +74,20 @@ class ESC32CAM:
             #ret, img = stream.read()
             imgNp=np.array(bytearray(stream.read()),dtype=np.uint8)
             img=cv2.imdecode(imgNp,-1)
-
+            self.url_ready = True
             
         #else:
         #except Exception as e:
         except:
             #print(e, "error-->", self.url)
-            print("read ",self.url,"stram error...")
+            print("read ",self.url,"stream error...")
+            self.url_ready = False
             #height,width = 0, 0
             img = self.blank_readerr.copy()
 
 
         height,width = img.shape[:2]
-        self.success_stream = time.time()
+        
         ip = re.findall( r'[0-9]+(?:\.[0-9]+){3}', self.url )
         img_txt = self.printText(img.copy(), ip[0], color=(255,0,0,0), size=0.65, pos=(10,25), type="Chinese")
         now_date = datetime.date.today().strftime("%B %d%Y, %B %d %I:%M%p")
