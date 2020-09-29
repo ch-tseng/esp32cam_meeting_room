@@ -1,0 +1,5 @@
+classes= 2
+train  = /DATA1/Datasets_mine/labeled/sale_crowndHuman_2_classes/yolov4-tiny_config/train.txt
+valid  = /DATA1/Datasets_mine/labeled/sale_crowndHuman_2_classes/yolov4-tiny_config/test.txt
+names = /DATA1/Datasets_mine/labeled/sale_crowndHuman_2_classes/yolov4-tiny_config/obj.names
+backup = /DATA1/Datasets_mine/labeled/sale_crowndHuman_2_classes/yolov4-tiny_config/weights/
